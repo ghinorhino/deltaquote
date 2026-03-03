@@ -25,7 +25,8 @@
         var characterTotal = 22;
         const tagMatch = filtcont.match(/^<([^>]+)>/);
         try {
-            if (tagMatch) {
+            // check if it isnt a discord mention
+            if (tagMatch && !tagMatch[1].startsWith('@')) {
                 characterOverride = `-face ${tagMatch[1].split('.')[0].replaceAll('&','')} -emotion ${tagMatch[1].split('.').length > 1 ? tagMatch[1].split('.')[1].replaceAll('&','') : '0'}`;
                 characterOverrided = true;
                 filtcont = filtcont.slice(tagMatch[0].length).trim();
