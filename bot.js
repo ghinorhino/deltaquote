@@ -16,7 +16,7 @@ const { createCanvas, loadImage } = require('canvas');
 const Secrets = JSON.parse(fs.readFileSync(path.join(__dirname, 'secrets.json'), 'utf-8'));
 
 function sanitizeText(text) {
-    var prohibitedChars = ['#', '*', '_', '~', '`', '|', '\\', '\n', '\r', '"'];
+    var prohibitedChars = ['#', '*', '_', '~', '`', '|', '\n', '\r', '"'];
     var sanitized = text;
     prohibitedChars.forEach(char => {
         var regex = new RegExp(`\\${char}`, 'g');
