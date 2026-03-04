@@ -53,7 +53,7 @@ async function makeCircularImage(imageBuffer, size) {
   );
 
   // Add 2px solid white circle border
-    ctx.lineWidth = 2;
+    ctx.lineWidth = 4;
     ctx.strokeStyle = '#FFFFFF';
     ctx.beginPath();
     ctx.arc(size / 2, size / 2, (size / 2) - 1, 0, Math.PI * 2);
