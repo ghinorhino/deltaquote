@@ -107,6 +107,10 @@ client.once(Events.ClientReady, async () => {
                 option.setName('character')
                     .setDescription('The character speaking (if left blank will be user PFP)')
                     .setRequired(false))
+            .addBooleanOption(option =>
+                option.setName('darkbox')
+                    .setDescription('Whether to use the dark box style (default: false)')
+                    .setRequired(false))
             .toJSON()
     ];
 

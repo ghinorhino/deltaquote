@@ -5,6 +5,7 @@ try {
             var commandArguments = interaction.options._hoistedOptions;
             var textArgument = commandArguments.find(arg => arg.name === 'text');
             var characterArgument = commandArguments.find(arg => arg.name === 'character');
+            var darkboxArgument = commandArguments.find(arg => arg.name === 'darkbox');
 
             let filtcont = sanitizeText(textArgument.value);
 
@@ -18,7 +19,7 @@ try {
 
             var randomFilename = require('crypto').randomBytes(16).toString('hex');
 
-            var userMsgAuthor = interaction.author;
+            var userMsgAuthor = interaction.user;
             var userPFP = userMsgAuthor.displayAvatarURL({ format: 'png', size: 512 });
             var imageBuffer = await dlImage(userPFP.replace('.webp', '.png'));
 
@@ -54,7 +55,7 @@ try {
             
             filtcont = array;
 
-            const command = `"${path.join(__dirname, 'boxgenerator', 'box.exe')}" -generate ${randomFilename} -boxheight "a" -text "* ${filtcont}" ${characterOverride} ${interactionId == 'dr_quote_light' ? '' : '-darkbox '}-quit`;
+            const command = `"${path.join(__dirname, 'boxgenerator', 'box.exe')}" -generate ${randomFilename} -boxheight "a" -text "* ${filtcont}" ${characterOverride} ${darkboxArgument && darkboxArgument.value ? '-darkbox ' : ''}-quit`;
 
             await new Promise((resolve, reject) => {
                 exec(command, (error, stdout, stderr) => {
