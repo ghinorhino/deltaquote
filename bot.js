@@ -5,6 +5,7 @@ const {
     REST,
     Routes,
     ContextMenuCommandBuilder,
+    SlashCommandBuilder,
     ApplicationCommandType
 } = require('discord.js');
 const https = require('https');
@@ -93,6 +94,19 @@ client.once(Events.ClientReady, async () => {
             .setType(ApplicationCommandType.Message)
             .setIntegrationTypes([0, 1])
             .setContexts([0, 1, 2])
+            .toJSON(),
+        new SlashCommandBuilder()
+            .setName('dialoguebox')
+            .setDescription('Generate a dialogue box from provided arguments')
+            .setContexts([0, 1, 2])
+            .addStringOption(option =>
+                option.setName('text')
+                    .setDescription('The dialogue\'s text')
+                    .setRequired(true))
+            .addStringOption(option =>
+                option.setName('character')
+                    .setDescription('The character speaking (if left blank will be user PFP)')
+                    .setRequired(false))
             .toJSON()
     ];
 
@@ -106,16 +120,16 @@ client.once(Events.ClientReady, async () => {
 });
 
 client.on(Events.InteractionCreate, async (interaction) => {
-    if (!interaction.isMessageContextMenuCommand()) return;
     var maps = {
         'DELTARUNE Quote': 'dr_quote',
-        'DELTARUNE Quote (Light World)': 'dr_quote_light'
+        'DELTARUNE Quote (Light World)': 'dr_quote_light',
+        'dialoguebox': 'dr_quote_slash'
     };
     if (!Object.keys(maps).includes(interaction.commandName)) return;
 
     var interactionId = maps[interaction.commandName];
 
-    const repliedTo = interaction.targetMessage;
+    const repliedTo = interaction.targetMessage || "null";
 
     var module = fs.readFileSync(path.join(__dirname, 'modules', `${interactionId == 'dr_quote_light' ? 'dr_quote' : interactionId}.js`), 'utf-8');
     eval(module); // yes i know eval is bad i promise i will require the module properly in the future

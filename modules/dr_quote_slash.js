@@ -2,7 +2,11 @@ try {
     (async () => {
     try {
         console.log('Processing interaction...');
-        let filtcont = sanitizeText(repliedTo.content);
+        var commandArguments = interaction.options._hoistedOptions;
+        var textArgument = commandArguments.find(arg => arg.name === 'text');
+        var characterArgument = commandArguments.find(arg => arg.name === 'character');
+
+        let filtcont = sanitizeText(textArgument.value);
 
         if (filtcont.trim() === '') {
             await interaction.reply({
@@ -24,17 +28,12 @@ try {
         var characterOverrided = false;
         var discordQuote = false;
         var characterTotal = 22;
-        const tagMatch = filtcont.match(/^<([^>]+)>/);
         try {
             // check if it isnt a discord mention
-            if (tagMatch && !tagMatch[1].startsWith('@')) {
-                characterOverride = `-face ${tagMatch[1].split('.')[0].replaceAll('&','')} -emotion ${tagMatch[1].split('.').length > 1 ? tagMatch[1].split('.')[1].replaceAll('&','') : '0'}`;
+            if (characterArgument.value.trim() !== '') {
+                characterOverride = `-face ${characterArgument.value.trim()}`;
                 characterOverrided = true;
-                filtcont = filtcont.slice(tagMatch[0].length).trim();
-        		if (tagMatch[1] == 'sans') {
-        			console.log('sans time');
-        			characterOverride += " -font fnt_comicsans -writerdat \"{'_spacingwidth': 8, '_spacingheight': 18}\"";
-        		}
+                filtcont = filtcont.slice(characterArgument.value.length).trim();
             }
         }
         catch (e) {
