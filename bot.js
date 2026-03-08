@@ -16,13 +16,6 @@ const path = require('path');
 const { createCanvas, loadImage } = require('canvas');
 const Secrets = JSON.parse(fs.readFileSync(path.join(__dirname, 'secrets.json'), 'utf-8'));
 
-if (fs.existsSync(path.join(__dirname, 'maintenance.json'))) {
-    const Maintenance = JSON.parse(fs.readFileSync(path.join(__dirname, 'maintenance.json'), 'utf-8'));
-}
-else {
-    var Maintenance = { status: false, endTime: null };
-}
-
 function sanitizeText(text) {
     var prohibitedChars = ['#', '*', '_', '~', '`', '|', '\n', '\r', '"'];
     var sanitized = text;
@@ -131,10 +124,6 @@ client.once(Events.ClientReady, async () => {
 });
 
 client.on(Events.InteractionCreate, async (interaction) => {
-    if (Maintenance.status) {
-        await interaction.reply({ content: 'The bot is currently undergoing maintenance! Maintenance ending on ' + Maintenance.endTime, ephemeral: true });
-        return;
-    }
     var maps = {
         'DELTARUNE Quote': 'dr_quote',
         'DELTARUNE Quote (Light World)': 'dr_quote_light',
