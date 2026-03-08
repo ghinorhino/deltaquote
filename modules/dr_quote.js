@@ -1,6 +1,13 @@
 try {
     (async () => {
     try {
+        if (repliedTo.author.bot) {
+            await interaction.reply({
+                content: 'Error: Cannot generate a quote from a bot message.',
+                ephemeral: true
+            });
+            return;
+        }
         console.log('Processing interaction...');
         let filtcont = sanitizeText(repliedTo.content);
 
