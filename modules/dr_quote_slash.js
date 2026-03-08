@@ -5,7 +5,7 @@ try {
             var commandArguments = interaction.options._hoistedOptions;
             var textArgument = commandArguments.find(arg => arg.name === 'text');
             var characterArgument = commandArguments.find(arg => arg.name === 'character');
-            var darkboxArgument = commandArguments.find(arg => arg.name === 'darkbox');
+            var darkboxArgument = commandArguments.find(arg => arg.name === 'lightbox') || { value: false };
 
             let filtcont = sanitizeText(textArgument.value);
 
@@ -55,7 +55,7 @@ try {
             
             filtcont = array;
 
-            const command = `"${path.join(__dirname, 'boxgenerator', 'box.exe')}" -generate ${randomFilename} -boxheight "a" -text "* ${filtcont}" ${characterOverride} ${darkboxArgument && darkboxArgument.value == false ? '-darkbox ' : ''}-quit`;
+            const command = `"${path.join(__dirname, 'boxgenerator', 'box.exe')}" -generate ${randomFilename} -boxheight "a" -text "* ${filtcont}" ${characterOverride} ${darkboxArgument.value == false ? '-darkbox ' : ''}-quit`;
 
             await new Promise((resolve, reject) => {
                 exec(command, (error, stdout, stderr) => {
