@@ -16,16 +16,6 @@ const path = require('path');
 const { createCanvas, loadImage } = require('canvas');
 const Secrets = JSON.parse(fs.readFileSync(path.join(__dirname, 'secrets.json'), 'utf-8'));
 
-function sanitizeText(text) {
-    var prohibitedChars = ['#', '*', '_', '~', '`', '|', '\n', '\r', '"'];
-    var sanitized = text;
-    prohibitedChars.forEach(char => {
-        var regex = new RegExp(`\\${char}`, 'g');
-        sanitized = sanitized.replace(regex, '');
-    });
-    return sanitized;
-}
-
 async function makeCircularImage(imageBuffer, size) {
     // Load image from buffer
     const image = await loadImage(imageBuffer);
@@ -134,8 +124,29 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
     const repliedTo = interaction.targetMessage;
 
-    var module = fs.readFileSync(path.join(__dirname, 'modules', `${interactionId == 'dr_quote_light' ? 'dr_quote' : interactionId}.js`), 'utf-8');
-    (async () => { eval(module); })(); // yes i know eval is bad i promise i will require the module properly in the future
+    var userPFP = repliedTo.author.displayAvatarURL({ format: 'png', size: 512 });
+    var imageBuffer = await dlImage(userPFP.replace('.webp', '.png'));
+    var circularImageBuffer = await makeCircularImage(imageBuffer, 256);
+
+    var box = await require('./box')(circularImageBuffer, repliedTo.content).catch(e => e);
+
+    if (box instanceof Error) {
+        await interaction.reply({
+            content: `Error: ${box.message}`,
+            ephemeral: true
+        });
+        return;
+    }
+
+    await interaction.reply({
+        files: [{
+            attachment: box.path,
+            name: 'quote.png'
+        }],
+        content: '',
+    });
+
+    fs.rmSync(box.path);
 });
 
 client.login(Secrets.token);
