@@ -27,34 +27,41 @@ function sanitizeText(text) {
 }
 
 async function makeCircularImage(imageBuffer, size) {
-  // Load image from buffer
-  const image = await loadImage(imageBuffer);
+    // Load image from buffer
+    const image = await loadImage(imageBuffer);
 
-  // Create square canvas
-  const canvas = createCanvas(size, size);
-  const ctx = canvas.getContext('2d');
+    // Add 10px padding
+    const padding = 10;
+    const canvas = createCanvas(size + padding * 2, size + padding * 2);
+    const ctx = canvas.getContext('2d');
 
-  // Create circular clipping path
-  ctx.beginPath();
-  ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
-  ctx.closePath();
-  ctx.clip();
+    // Create circular clipping path with padding
+    ctx.beginPath();
+    ctx.arc(
+        (size + padding * 2) / 2,
+        (size + padding * 2) / 2,
+        size / 2,
+        0,
+        Math.PI * 2
+    );
+    ctx.closePath();
+    ctx.clip();
 
-  // Draw image centered & scaled to cover
-  const scale = Math.max(size / image.width, size / image.height);
-  const x = (size - image.width * scale) / 2;
-  const y = (size - image.height * scale) / 2;
+    // Draw image centered & scaled to cover inside padded area
+    const scale = Math.max(size / image.width, size / image.height);
+    const x = padding + (size - image.width * scale) / 2;
+    const y = padding + (size - image.height * scale) / 2;
 
-  ctx.drawImage(
-    image,
-    x,
-    y,
-    image.width * scale,
-    image.height * scale
-  );
+    ctx.drawImage(
+        image,
+        x,
+        y,
+        image.width * scale,
+        image.height * scale
+    );
 
-  // Return PNG buffer
-  return canvas.toBuffer('image/png');
+    // Return PNG buffer
+    return canvas.toBuffer('image/png');
 }
 
 function dlImage(url) {
