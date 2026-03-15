@@ -62,7 +62,7 @@ try {
         
         filtcont = array;
 
-        const command = `"${path.join(__dirname, 'boxgenerator', 'box.exe')}" -generate ${randomFilename} -boxheight "a" -text "* ${filtcont}" ${characterOverride} ${interactionId == 'dr_quote_light' ? '' : '-darkbox '}-quit`;
+        const command = `"${path.join(__dirname, 'boxgenerator', 'box.exe')}" -generate ${randomFilename} -boxheight "a" -gif -text "* ${filtcont}" ${characterOverride} ${interactionId == 'dr_quote_light' ? '' : '-darkbox '}-quit`;
 
         await new Promise((resolve, reject) => {
             exec(command, (error, stdout, stderr) => {
@@ -75,15 +75,15 @@ try {
 
         await interaction.reply({
             files: [{
-                attachment: (fs.readFileSync(path.join(appdata, '../', 'Local', 'DELTARUNE', 'TEXTBOX_PROGRAM', `${randomFilename}.png`))),
-                name: 'quote.png'
+                attachment: (fs.readFileSync(path.join(appdata, '../', 'Local', 'DELTARUNE', 'TEXTBOX_PROGRAM', `${randomFilename}.gif`))),
+                name: 'quote.gif'
             }],
             content: (characterOverrided && !discordQuote ? '_The character of the box has been overriden since a tag was detected._' : '') + (discordQuote ? '**This message was generated using another Discord user\'s profile picture.**' : ''),
         });
 
         console.log('sent reply, now cleaning up files...');
-        fs.unlinkSync(path.join(__dirname, 'boxgenerator', `temp-${randomFilename}.png`));
-        fs.unlinkSync(path.join(appdata, '../', 'Local', 'DELTARUNE', 'TEXTBOX_PROGRAM', `${randomFilename}.png`));
+        fs.unlinkSync(path.join(__dirname, 'boxgenerator', `temp-${randomFilename}.gif`));
+        fs.unlinkSync(path.join(appdata, '../', 'Local', 'DELTARUNE', 'TEXTBOX_PROGRAM', `${randomFilename}.gif`));
 
     } catch (error) {
         await interaction.reply({
