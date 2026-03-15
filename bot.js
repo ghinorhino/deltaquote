@@ -20,8 +20,8 @@ async function makeCircularImage(imageBuffer, size) {
     // Load image from buffer
     const image = await loadImage(imageBuffer);
 
-    // Add 10px padding
-    const padding = 10;
+    // Add 15px padding
+    const padding = 15;
     const canvas = createCanvas(size + padding * 2, size + padding * 2);
     const ctx = canvas.getContext('2d');
 
