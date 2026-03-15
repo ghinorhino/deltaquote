@@ -1,9 +1,35 @@
 {
+  "name": "deltaquote",
+  "version": "2.0.0",
+  "description": "A Discord bot to create DELTARUNE text boxes.",
+  "keywords": [
+    "deltarune"
+  ],
+  "maintenance": {
+    "is": false,
+    "reason": "No reason provided."
+  },
+  "homepage": "https://github.com/ghinorhino/deltaquote#readme",
+  "bugs": {
+    "url": "https://github.com/ghinorhino/deltaquote/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ghinorhino/deltaquote.git"
+  },
+  "license": "EUPL-1.2",
+  "author": "GhinoRhino",
+  "type": "commonjs",
+  "main": "bot.js",
+  "scripts": {
+    "test": "node bot.js"
+  },
   "dependencies": {
     "canvas": "^3.2.1",
     "discord.js": "^14.25.1",
     "express": "^5.2.1",
     "node-fetch": "^3.3.2",
     "nodemon": "^3.1.11"
-  }
+  },
+  "devDependencies": {}
 }

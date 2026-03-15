@@ -5,6 +5,7 @@ const {
     REST,
     Routes,
     ContextMenuCommandBuilder,
+    MessageFlags,
     SlashCommandBuilder,
     ApplicationCommandType
 } = require('discord.js');
@@ -15,6 +16,7 @@ const { execFileSync, exec } = require('child_process');
 const path = require('path');
 const { createCanvas, loadImage } = require('canvas');
 const Secrets = JSON.parse(fs.readFileSync(path.join(__dirname, 'secrets.json'), 'utf-8'));
+let MAINTENANCE = false;
 
 async function makeCircularImage(imageBuffer, size) {
     // Load image from buffer
@@ -69,7 +71,9 @@ const client = new Client({
 });
 
 client.once(Events.ClientReady, async () => {
-    console.log(`Logged in as ${client.user.tag}! Deploying commands...`);
+    console.clear();
+    process.stdout.write('Deltaquote ' + require('./package.json').version + '\nProgrammed by GhinoRhino\n\n' + '-'.repeat(process.stdout.columns) + '\n\n');
+    partialLog(yellowText('Starting Deltaquote...'));
 
     const commands = [
         new ContextMenuCommandBuilder()
@@ -109,16 +113,49 @@ client.once(Events.ClientReady, async () => {
         { body: commands }
     );
 
-    console.log('Successfully registered globally.');
+    // change bot status to streaming "Deltaquote"
+    await client.user.setActivity('Deltaquote', { type: 'STREAMING', url: 'https://www.twitch.tv/ghinorhino' });
+
+    partialLog(greenText(' Ready!\n'));
+
+    if (require('./package.json').maintenance.is) {
+        MAINTENANCE = true;
+        partialLog(redText('The bot is currently set in maintenance mode! Only the owner will be able to use it.\n'));
+    }
 });
 
+function greenText(str) {
+    return '\x1b[32m' + str + '\x1b[0m';
+}
+
+function redText(str) {
+    return '\x1b[31m' + str + '\x1b[0m';
+}
+
+function yellowText(str) {
+    return '\x1b[33m' + str + '\x1b[0m';
+}
+
+function partialLog(str) {
+    process.stdout.write(str);
+}
+
 client.on(Events.InteractionCreate, async (interaction) => {
+    if (MAINTENANCE && interaction.user.id !== Secrets.ownerId) {
+        await interaction.reply({
+            content: 'The bot is currently in maintenance mode: ' + require('./package.json').maintenance.reason,
+            flags: MessageFlags.Ephemeral
+        });
+        return;
+    }
     var maps = {
         'DELTARUNE Quote': 'dr_quote',
         'DELTARUNE Quote (Light World)': 'dr_quote_light',
         'dialoguebox': 'dr_quote_slash'
     };
     if (!Object.keys(maps).includes(interaction.commandName)) return;
+
+    partialLog(yellowText('Interaction received'));
 
     var interactionId = maps[interaction.commandName];
 
@@ -128,12 +165,19 @@ client.on(Events.InteractionCreate, async (interaction) => {
     var imageBuffer = await dlImage(userPFP.replace('.webp', '.png'));
     var circularImageBuffer = await makeCircularImage(imageBuffer, 256);
 
+    var startJob = Date.now();
+
     var box = await require('./box')(circularImageBuffer, repliedTo.content, interactionId == 'dr_quote_light').catch(e => e);
 
+    var endJob = Date.now();
+
+    partialLog(greenText(` | Job done in ${((endJob - startJob) / 1000).toFixed(3)}s`));
+
     if (box instanceof Error) {
+        partialLog(redText(' | Error creating box: ' + box.message + '\n'));
         await interaction.reply({
-            content: `Error: ${box.message}`,
-            ephemeral: true
+            content: `**Ooops!** An error occurred and your interaction couldn't be processed.\n-# ${box.message}`,
+            flags: MessageFlags.Ephemeral
         });
         return;
     }
@@ -145,6 +189,8 @@ client.on(Events.InteractionCreate, async (interaction) => {
         }],
         content: '',
     });
+
+    partialLog(greenText(' | Done\n'));
 
     fs.rmSync(box.path);
 });

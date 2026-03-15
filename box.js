@@ -56,7 +56,7 @@ async function makeBox(pfpBuffer, messageText, lightBox = false) {
             }
         }
         catch (e) {
-            console.log('Error processing tag:', e);
+            
         }
 
         // word wrapping
@@ -98,6 +98,10 @@ async function makeBox(pfpBuffer, messageText, lightBox = false) {
             `${randomFilename}.png`
         );
 
+        if (!fs.existsSync(outputPath)) {
+            throw new Error('The textbox generator failed to produce an output image. This is a common error, so try again.');
+        }
+
         const outputBuffer = fs.readFileSync(outputPath);
 
         // cleanup
@@ -110,8 +114,7 @@ async function makeBox(pfpBuffer, messageText, lightBox = false) {
         };
 
     } catch (err) {
-        console.error(err);
-        throw err;
+        return new Error('Failed to create box: ' + err.message);
     }
 }
 
