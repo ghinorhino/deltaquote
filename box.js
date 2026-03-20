@@ -106,12 +106,9 @@ async function makeBox(pfpBuffer, messageText, lightBox = false) {
 
         // cleanup
         fs.unlinkSync(tempFacePath);
+        fs.unlinkSync(outputPath);
 
-        return {
-            buffer: outputBuffer,
-            path: outputPath,
-            characterOverrided
-        };
+        return outputBuffer;
 
     } catch (err) {
         return new Error('Failed to create box: ' + err.message);

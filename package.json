@@ -7,7 +7,7 @@
   ],
   "maintenance": {
     "is": false,
-    "reason": "No reason provided."
+    "reason": "Scheduled downtime for stability update, given that server is still frequently crashing due to hardware fault."
   },
   "homepage": "https://github.com/ghinorhino/deltaquote#readme",
   "bugs": {

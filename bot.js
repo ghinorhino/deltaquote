@@ -18,6 +18,18 @@ const { createCanvas, loadImage } = require('canvas');
 const Secrets = JSON.parse(fs.readFileSync(path.join(__dirname, 'secrets.json'), 'utf-8'));
 let MAINTENANCE = false;
 
+async function padImage(buffer, padSize) {
+    const image = await loadImage(buffer);
+    const paddedWidth = image.width + padSize * 2;
+    const paddedHeight = image.height + padSize * 2;
+    const canvas = createCanvas(paddedWidth, paddedHeight);
+    const ctx = canvas.getContext('2d');
+
+    ctx.drawImage(image, padSize, padSize);
+
+    return canvas.toBuffer('image/png');
+}
+
 async function makeCircularImage(imageBuffer, size) {
     // Load image from buffer
     const image = await loadImage(imageBuffer);
@@ -155,7 +167,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
         return;
     }
     
-    if (MAINTENANCE && interaction.user.id !== Secrets.ownerId) {
+    if (MAINTENANCE) {
         await interaction.reply({
             content: 'The bot is currently in maintenance mode: ' + require('./package.json').maintenance.reason,
             flags: MessageFlags.Ephemeral
@@ -196,17 +208,24 @@ client.on(Events.InteractionCreate, async (interaction) => {
         return;
     }
 
+    if (!(box instanceof Buffer)) {
+        partialLog(redText(' | Unknown error creating box\n'));
+        await interaction.reply({
+            content: `**Ooops!** An unknown error occurred and your interaction couldn't be processed.`,
+            flags: MessageFlags.Ephemeral
+        });
+        return;
+    }
+
     await interaction.reply({
         files: [{
-            attachment: box.path,
+            attachment: await padImage(box, 10),
             name: 'quote.png'
         }],
         content: '',
     });
 
     partialLog(greenText(' | Done\n'));
-
-    fs.rmSync(box.path);
 });
 
 client.login(Secrets.token);
