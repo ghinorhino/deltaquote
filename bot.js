@@ -104,6 +104,11 @@ client.once(Events.ClientReady, async () => {
                 option.setName('lightbox')
                     .setDescription('Whether to use the light box style (default: false)')
                     .setRequired(false))
+            .toJSON(),
+        new SlashCommandBuilder()
+            .setName('serverinfo')
+            .setDescription('Get information about the newly launched Deltaquote server!')
+            .setContexts([0, 1, 2])
             .toJSON()
     ];
 
@@ -156,6 +161,15 @@ client.on(Events.InteractionCreate, async (interaction) => {
     if (!Object.keys(maps).includes(interaction.commandName)) return;
 
     partialLog(yellowText('Interaction received'));
+
+    if (interaction.commandName === 'serverinfo') {
+        partialLog(greenText(' | Sending server info\n'));
+        await interaction.reply({
+            content: fs.readFileSync(path.join(__dirname, 'serverinfo.txt'), 'utf-8'),
+            flags: MessageFlags.Ephemeral
+        });
+        return;
+    }
 
     var interactionId = maps[interaction.commandName];
 
