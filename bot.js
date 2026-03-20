@@ -146,6 +146,15 @@ function partialLog(str) {
 }
 
 client.on(Events.InteractionCreate, async (interaction) => {
+    if (interaction.commandName === 'serverinfo') {
+        partialLog(greenText(' | Sending server info\n'));
+        await interaction.reply({
+            content: fs.readFileSync(path.join(__dirname, 'serverinfo.txt'), 'utf-8'),
+            flags: MessageFlags.Ephemeral
+        });
+        return;
+    }
+    
     if (MAINTENANCE && interaction.user.id !== Secrets.ownerId) {
         await interaction.reply({
             content: 'The bot is currently in maintenance mode: ' + require('./package.json').maintenance.reason,
@@ -161,15 +170,6 @@ client.on(Events.InteractionCreate, async (interaction) => {
     if (!Object.keys(maps).includes(interaction.commandName)) return;
 
     partialLog(yellowText('Interaction received'));
-
-    if (interaction.commandName === 'serverinfo') {
-        partialLog(greenText(' | Sending server info\n'));
-        await interaction.reply({
-            content: fs.readFileSync(path.join(__dirname, 'serverinfo.txt'), 'utf-8'),
-            flags: MessageFlags.Ephemeral
-        });
-        return;
-    }
 
     var interactionId = maps[interaction.commandName];
 
