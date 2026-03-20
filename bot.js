@@ -127,7 +127,7 @@ client.once(Events.ClientReady, async () => {
             .setName('Add To Multiple Quote Queue')
             .setType(ApplicationCommandType.Message)
             .setIntegrationTypes([0, 1])
-            .setContexts([0, 2])
+            .setContexts([0, 1, 2])
             .toJSON(),
         new SlashCommandBuilder()
             .setName('dialoguebox')
@@ -149,12 +149,12 @@ client.once(Events.ClientReady, async () => {
         new SlashCommandBuilder()
             .setName('renderqueue')
             .setDescription('Render all quotes in the queue into a single image (if any)')
-            .setContexts([0, 2])
+            .setContexts([0, 1, 2])
             .toJSON(),
         new SlashCommandBuilder()
             .setName('removequeue')
             .setDescription('Remove all quotes in the queue without rendering (if any)')
-            .setContexts([0, 2])
+            .setContexts([0, 1, 2])
             .toJSON()
     ];
 
