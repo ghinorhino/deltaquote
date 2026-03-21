@@ -256,6 +256,8 @@ client.on(Events.InteractionCreate, async (interaction) => {
         });
         return;
     }
+
+
     var maps = {
         'DELTARUNE Quote': 'dr_quote',
         'DELTARUNE Quote (Light World)': 'dr_quote_light',
