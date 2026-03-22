@@ -130,23 +130,6 @@ client.once(Events.ClientReady, async () => {
             .setContexts([0, 1, 2])
             .toJSON(),
         new SlashCommandBuilder()
-            .setName('dialoguebox')
-            .setDescription('Generate a dialogue box from provided arguments')
-            .setContexts([0, 1, 2])
-            .addStringOption(option =>
-                option.setName('text')
-                    .setDescription('The dialogue\'s text')
-                    .setRequired(true))
-            .addStringOption(option =>
-                option.setName('character')
-                    .setDescription('The character speaking (if left blank will be user PFP)')
-                    .setRequired(false))
-            .addBooleanOption(option =>
-                option.setName('lightbox')
-                    .setDescription('Whether to use the light box style (default: false)')
-                    .setRequired(false))
-            .toJSON(),
-        new SlashCommandBuilder()
             .setName('renderqueue')
             .setDescription('Render all quotes in the queue into a single image (if any)')
             .setContexts([0, 1, 2])
@@ -197,6 +180,8 @@ function partialLog(str) {
 
 client.on(Events.InteractionCreate, async (interaction) => {
     partialLog(yellowText('Interaction received'));
+
+    // first handle special commands that aren't quote generation
 
     if (interaction.commandName === 'renderqueue') {
         partialLog(greenText(' | Rendering quote queue\n'));
@@ -261,8 +246,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
     var maps = {
         'DELTARUNE Quote': 'dr_quote',
         'DELTARUNE Quote (Light World)': 'dr_quote_light',
-        'Add To Multiple Quote Queue': 'dr_quote_multi_add',
-        'dialoguebox': 'dr_quote_slash'
+        'Add To Multiple Quote Queue': 'dr_quote_multi_add'
     };
     if (!Object.keys(maps).includes(interaction.commandName)) return;
 
