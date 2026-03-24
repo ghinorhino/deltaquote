@@ -46,7 +46,7 @@ client.once(Events.ClientReady, async () => {
             .toJSON(),
         new ContextMenuCommandBuilder()
             .setName('Message as a UNDERTALE dialogue')
-            .setType(ApplicationCommandType.User)
+            .setType(ApplicationCommandType.Message)
             .setIntegrationTypes([0, 1])
             .setContexts([0, 1, 2])
             .toJSON(),
