@@ -39,8 +39,14 @@ client.once(Events.ClientReady, async () => {
 
     const commands = [
         new ContextMenuCommandBuilder()
-            .setName('DELTARUNE Quote')
+            .setName('Message as a DELTARUNE dialogue')
             .setType(ApplicationCommandType.Message)
+            .setIntegrationTypes([0, 1])
+            .setContexts([0, 1, 2])
+            .toJSON(),
+        new ContextMenuCommandBuilder()
+            .setName('Message as a UNDERTALE dialogue')
+            .setType(ApplicationCommandType.User)
             .setIntegrationTypes([0, 1])
             .setContexts([0, 1, 2])
             .toJSON(),
@@ -97,7 +103,8 @@ client.on(Events.InteractionCreate, async (interaction) => {
     partialLog(yellowText('Interaction received') + " | Command: " + interaction.commandName);
 
     switch (interaction.commandName) {
-        case 'DELTARUNE Quote':
+        case 'Message as a DELTARUNE dialogue':
+        case 'Message as a UNDERTALE dialogue':
             const repliedTo = interaction.targetMessage;
             var userPFP = repliedTo.author.displayAvatarURL({ format: 'png', size: 512 });
             var imageBuffer = await dlImage(userPFP.replace('.webp', '.png'));
@@ -105,7 +112,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
             var box;
 
-            box = await require('./modules/deltarune_generator')(circularImageBuffer, repliedTo.content, false).catch(e => e);
+            box = await require('./modules/deltarune_generator')(circularImageBuffer, repliedTo.content, interaction.commandName == "Message as a UNDERTALE dialogue").catch(e => e);
 
             if (box instanceof Error) {
                 await interaction.reply({
