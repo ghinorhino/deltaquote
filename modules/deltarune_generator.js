@@ -23,7 +23,7 @@ async function makeBox(pfpBuffer, messageText, lightBox = false) {
 
         const randomFilename = crypto.randomBytes(16).toString('hex');
 
-        const tempFacePath = path.join(__dirname, 'boxgenerator', `temp-${randomFilename}.png`);
+        const tempFacePath = path.join(__dirname, '../', 'exepacks', 'boxgenerator', `temp-${randomFilename}.png`);
 
         fs.writeFileSync(
             tempFacePath,
@@ -48,11 +48,6 @@ async function makeBox(pfpBuffer, messageText, lightBox = false) {
                 characterOverrided = true;
 
                 filtcont = filtcont.slice(tagMatch[0].length).trim();
-
-                if (tagMatch[1] === 'sans') {
-                    characterOverride +=
-                        ` -font fnt_comicsans -writerdat "{'_spacingwidth': 8, '_spacingheight': 18}"`;
-                }
             }
         }
         catch (e) {
@@ -73,7 +68,7 @@ async function makeBox(pfpBuffer, messageText, lightBox = false) {
             }, '');
 
         const command =
-            `"${path.join(__dirname, 'boxgenerator', 'box.exe')}" ` +
+            `"${path.join(__dirname, '../', 'exepacks', 'boxgenerator', 'box.exe')}" ` +
             `-generate ${randomFilename} ` +
             `-boxheight "a" ` +
             `-text "* ${filtcont}" ` +
