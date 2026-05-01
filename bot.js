@@ -7,7 +7,8 @@ const {
     ContextMenuCommandBuilder,
     MessageFlags,
     SlashCommandBuilder,
-    ApplicationCommandType
+    ApplicationCommandType,
+    EmbedBuilder
 } = require('discord.js');
 const https = require('https');
 const fs = require('fs');
@@ -108,9 +109,14 @@ client.on(Events.InteractionCreate, async (interaction) => {
                     attachment: await padImage(box, 15),
                     name: 'quote.png'
                 }],
-                content: '',
+                embeds: [
+                    new EmbedBuilder()
+                        .setTitle('Discontinuation')
+                        .setDescription('Thank you for using Deltaquote. Please note that the bot will be **made offline** on May 15th 2026.')
+                        .setColor(0xff5555)
+                ],
+                content: ''
             });
-
             break;
     }
 
