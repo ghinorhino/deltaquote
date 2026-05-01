@@ -112,7 +112,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
                 embeds: [
                     new EmbedBuilder()
                         .setTitle('Discontinuation')
-                        .setDescription('Thank you for using Deltaquote. Please note that the bot will be **made offline** on May 15th 2026.')
+                        .setDescription('_Thank you for using Deltaquote over the past time._ Due to hosting problems, Deltaquote will **permanently shut down** on May 10th 2026.')
                         .setColor(0xff5555)
                 ],
                 content: ''
