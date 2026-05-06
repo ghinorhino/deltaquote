@@ -4,11 +4,18 @@ const crypto = require('crypto');
 const { exec } = require('child_process');
 
 function sanitizeText(text) {
-    var prohibitedChars = ['#', '*', '_', '~', '`', '|', '\n', '\r', '"'];
+    var prohibitedChars = ['#', '*', '\r', '"', "&"];
+    var replacements = ["\\#", null, null, "“", "\\&"] // “ is a Replacement Memories Added to TEXTBOX_PROGRAM so people can use '"'
     var sanitized = text;
-    prohibitedChars.forEach(char => {
+    prohibitedChars.forEach((char, index) => {
         var regex = new RegExp(`\\${char}`, 'g');
-        sanitized = sanitized.replace(regex, '');
+        var newchar = '';
+        if (index > 0 && index < replacements.length) {
+            if (replacements[index] !== null) {
+                newchar = replacements[index];
+            }
+        }
+        sanitized = sanitized.replace(regex, newchar);
     });
     return sanitized;
 }
