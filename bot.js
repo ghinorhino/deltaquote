@@ -157,7 +157,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
                 });
             }
 
-            await interaction.reply({
+            await interaction.editReply({
                 files: [{
                     attachment: box,
                     name: 'quote.png'
