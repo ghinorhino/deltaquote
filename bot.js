@@ -117,6 +117,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
                 messageText = characterMatch[2];
             }
             
+            interaction.deferReply({ ephemeral: true });
 
             box = await require('./modules/deltarune_generator')(circularImageBuffer, messageText, character || "", interaction.commandName == "Message as a UNDERTALE dialogue").catch(e => e);
 
@@ -144,6 +145,8 @@ client.on(Events.InteractionCreate, async (interaction) => {
             var circularImageBuffer = await makeCircularImage(imageBuffer, 256);
 
             var box;
+
+            interaction.deferReply({ ephemeral: true });
 
             box = await require('./modules/deltarune_generator')(circularImageBuffer, text, character || "", false).catch(e => e);
 
