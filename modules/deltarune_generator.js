@@ -97,7 +97,7 @@ async function makeBox(pfpBuffer, messageText, character = '', lightBox = false)
         return outputBuffer;
 
     } catch (err) {
-        return new Error('Failed to create box: ' + err.message);
+        return new Error('Failed to create box: ' + err.message + '\n' + err.stack);
     }
 }
 
