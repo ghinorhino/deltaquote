@@ -58,6 +58,7 @@ async function makeBox(pfpBuffer, messageText, character = '', lightBox = false)
             }, '');
 
         const command =
+            "wine " +
             `"${path.join(__dirname, '../', 'exepacks', 'boxgenerator', 'box.exe')}" ` +
             `-generate ${randomFilename} ` +
             `-boxheight "a" ` +
