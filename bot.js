@@ -117,18 +117,18 @@ client.on(Events.InteractionCreate, async (interaction) => {
                 messageText = characterMatch[2];
             }
             
-            interaction.deferReply({ ephemeral: true });
+            interaction.deferReply({ ephemeral: false });
 
             box = await require('./modules/deltarune_generator')(circularImageBuffer, messageText, character || "", interaction.commandName == "Message as a UNDERTALE dialogue").catch(e => e);
 
             if (box instanceof Error) {
-                await interaction.reply({
+                await interaction.editReply({
                     content: 'An error occurred while generating the DELTARUNE textbox. Please try again later.\n-#' + box.message,
                     flags: MessageFlags.Ephemeral
                 });
             }
 
-            await interaction.reply({
+            await interaction.editReply({
                 files: [{
                     attachment: box,
                     name: 'quote.png'
@@ -146,12 +146,12 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
             var box;
 
-            interaction.deferReply({ ephemeral: true });
+            interaction.deferReply({ ephemeral: false });
 
             box = await require('./modules/deltarune_generator')(circularImageBuffer, text, character || "", false).catch(e => e);
 
             if (box instanceof Error) {
-                await interaction.reply({
+                await interaction.editReply({
                     content: 'An error occurred while generating the DELTARUNE textbox. Please try again later.\n-#' + box.message,
                     flags: MessageFlags.Ephemeral
                 });
