@@ -60,9 +60,41 @@ client.once(Events.ClientReady, async () => {
                     .setRequired(true))
             .addStringOption(option =>
                 option.setName('character')
-                    .setDescription('The character name to display in the dialogue box.')
-                    .setRequired(false))
+                    .setDescription('The character to display in the dialogue box.')
+                    .setRequired(false)
+                .setRequired(false)
+		        .addChoices(
+					{ name: 'Noone', value: 'noone' },
+					{ name: 'Noelle', value: 'n_matome' },
+					{ name: 'Susie', value: 'susie_alt' },
+					{ name: 'Ralsei (NoHat)', value: 'r_nohat' },
+					{ name: 'Ralsei (Hat)', value: 'r_dark' },
+					{ name: 'Ralsei (Hood)', value: 'r_hood' },
+					{ name: 'Carol', value: 'carol' },
+					{ name: 'sans', value: 'sans' },
+					{ name: 'Rouxls', value: 'rurus' },
+					{ name: 'Catty', value: 'catty' },
+					{ name: 'Undyne', value: 'undyne' },
+					{ name: 'Asgore [Old]', value: 'asgore' },
+					{ name: 'Queen', value: 'queen' },
+					{ name: 'Pizza/Burgerpants', value: 'burgerpants' },
+					{ name: 'Placeholder', value: 'placeholder' },
+					{ name: 'bratty', value: 'bratty' },
+					{ name: 'Lancer', value: 'l0' },
+					{ name: 'Rudy', value: 'rudy' },
+					{ name: 'King', value: 'king' },
+					{ name: 'Berdly', value: 'berdly' },
+					{ name: 'Pink', value: 'pinkspeaker_data'},
+					{ name: 'Flowery', value: 'flowery'},										
+					{ name: 'Crowned Asgore', value: 'asgore_matome_crown'},								
+					{ name: 'Asgore', value: 'asgore_matome'},
+				))
+            .addNumberOption(option =>
+                option.setName('index')
+                    .setDescription('The index of the portrait to display (advanced).')
+                    .setRequired(true))
             .toJSON()
+
     ];
 
     const rest = new REST({ version: '10' }).setToken(Secrets.token);
@@ -139,7 +171,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
             break;
         case 'quote':
             var text = interaction.options.getString('text');
-            var character = interaction.options.getString('character') || '';
+            var character = interaction.options.getString('character') || '' + '.' + (interaction.options.getNumber('index') || 0);
             var userPFP = interaction.user.displayAvatarURL({ format: 'png', size: 512 });
             var imageBuffer = await dlImage(userPFP.replace('.webp', '.png'));
             var circularImageBuffer = await makeCircularImage(imageBuffer, 256);
