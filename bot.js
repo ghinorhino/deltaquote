@@ -64,7 +64,7 @@ client.once(Events.ClientReady, async () => {
                     .setRequired(false)
                 .setRequired(false)
 		    )
-            .addNumberOption(option =>
+            .addStringOption(option =>
                 option.setName('index')
                     .setDescription('The index of the portrait to display (advanced).')
                     .setRequired(true))
