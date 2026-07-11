@@ -79,6 +79,13 @@ client.once(Events.ClientReady, async () => {
     );
 
     partialLog(greenText(' Ready!\n'));
+    try {
+        // set bot status to online
+        client.user.setPresence({ activities: [{ name: 'Deltaquote' }], status: 'online' });
+    } catch (e) {
+        partialLog(redText('Failed to set presence: ' + e.message + '\n'));
+    }
+
 
     if (!fs.existsSync(path.join(__dirname, 'temp'))) {
         fs.mkdirSync(path.join(__dirname, 'temp'));
