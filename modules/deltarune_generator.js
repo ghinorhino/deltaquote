@@ -58,7 +58,6 @@ async function makeBox(pfpBuffer, messageText, character = '', lightBox = false)
             }, '');
 
         const command =
-            "wine " +
             `"${path.join(__dirname, '../', 'exepacks', 'boxgenerator', 'box.exe')}" ` +
             `-generate ${randomFilename} ` +
             `-boxheight "a" ` +
@@ -75,14 +74,7 @@ async function makeBox(pfpBuffer, messageText, character = '', lightBox = false)
 
         const os = require('os');
 
-        // Resolve APPDATA for native Windows or Wine environments.
-        // Prefer process.env.APPDATA; fallback to WINEPREFIX/drive_c users AppData/Roaming.
         let appdata = process.env.APPDATA;
-        if (!appdata) {
-            const winePrefix = process.env.WINEPREFIX || path.join(os.homedir(), '.wine');
-            const username = (process.env.USER || process.env.USERNAME || os.userInfo().username || 'wineuser');
-            appdata = path.join(winePrefix, 'drive_c', 'users', username, 'AppData', 'Roaming');
-        }
 
         const outputPath = path.join(
             appdata,
