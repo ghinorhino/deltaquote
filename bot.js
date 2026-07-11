@@ -53,6 +53,7 @@ client.once(Events.ClientReady, async () => {
             .toJSON(),
         new SlashCommandBuilder()
             .setName('quote')
+            .setContexts([0, 1, 2])
             .setDescription('Generate a DELTARUNE dialogue box from a message.')
             .addStringOption(option =>
                 option.setName('text')
@@ -67,7 +68,7 @@ client.once(Events.ClientReady, async () => {
             .addStringOption(option =>
                 option.setName('index')
                     .setDescription('The index of the portrait to display (advanced).')
-                    .setRequired(true)
+                    .setRequired(false)
             )
             .toJSON()
 
