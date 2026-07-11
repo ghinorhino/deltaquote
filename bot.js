@@ -57,17 +57,18 @@ client.once(Events.ClientReady, async () => {
             .addStringOption(option =>
                 option.setName('text')
                     .setDescription('The text to display in the dialogue box.')
-                    .setRequired(true))
+                    .setRequired(true)
+            )
             .addStringOption(option =>
                 option.setName('character')
                     .setDescription('The character to display in the dialogue box.')
                     .setRequired(false)
-                .setRequired(false)
 		    )
             .addStringOption(option =>
                 option.setName('index')
                     .setDescription('The index of the portrait to display (advanced).')
-                    .setRequired(true))
+                    .setRequired(true)
+            )
             .toJSON()
 
     ];
